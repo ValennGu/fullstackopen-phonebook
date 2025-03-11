@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ValennGu/fullstackopen-phonebook#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
   }
 }
