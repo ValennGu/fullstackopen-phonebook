@@ -23,26 +23,35 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = req.params.id
-  const person = persons.find(p => p.id === id)
-
-  if (!person) {
-    res.status(404).end()
-  }
-
-  res.send(person)
+  Person
+    .findById(req.params.id)
+    .then(result => {
+      if (!result) {
+        res.status(404).send({ error: 'Person not found.'})
+      } else {
+        res.send(result)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).send('Bad request.')
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = req.params.id
-  const person = persons.find(p => p.id === id)
-
-  if (!person) {
-    res.status(404).end()
-  }
-
-  persons = persons.filter(p => p.id !== id)
-  res.send(person)
+  Person
+    .findByIdAndDelete(req.params.id)
+    .then(result => {
+      if (!result) {
+        res.status(404).send({ error: 'Person not found and therefore could not delete.' })
+      } else {
+        res.send(result)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).send({ error: 'Bad request.' })
+    })
 })
 
 app.post('/api/persons', (req, res) => {
@@ -55,20 +64,21 @@ app.post('/api/persons', (req, res) => {
   } else if (!body.number) {
     res.status(400).send({ error: 'Mising number.'})
   } else {
-    const match = persons.find(p => p.number === body.number)
+    // TODO: Find if the person already exists in the Database.
+    // const match = persons.find(p => p.number === body.number)
     
-    if (match) {
-      res.status(400).send({ error: 'Number already exists in the phonebook.'})
-    } else {
-      const person = {
-        id: String(Math.random()),
+    // if (match) {
+      // res.status(400).send({ error: 'Number already exists in the phonebook.'})
+    // } else {
+      const person = new Person({
         name: body.name,
         number: body.number,
-      }
+      })
 
-      persons = persons.concat(person)
-      res.send(person)
-    } 
+      person
+        .save()
+        .then(result => res.send(result))
+    // } 
   }
 })
 
