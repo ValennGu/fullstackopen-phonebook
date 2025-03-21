@@ -1,30 +1,10 @@
+require('dotenv').config()
+
 const express = require('express')
 const morgan = require('morgan')
-const app = express()
-const PORT = process.env.PORT || 3001
 
-let persons = [
-  { 
-    "id": "1",
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": "2",
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": "3",
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": "4",
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
+const app = express()
+const Person = require('./models/person')
 
 morgan.token('body', function (req, res) {
   return JSON.stringify(req.body)
@@ -35,7 +15,11 @@ app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person
+    .find({})
+    .then(result => {
+      res.json(result)
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -89,7 +73,7 @@ app.post('/api/persons', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-  const count = persons.length
+  const count = 'TODO'
   const date = new Date()
 
   res.send(`
@@ -98,6 +82,6 @@ app.get('/info', (req, res) => {
   `)
 })
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`)
 })
