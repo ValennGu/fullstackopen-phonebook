@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 mongodb_pass
+.env
 *.local
 
 # Editor directories and files
