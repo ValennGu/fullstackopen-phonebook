@@ -38,7 +38,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.put('/api/persons/:id', (req, res, next) => {
   Person
-    .findByIdAndUpdate(req.params.id, { number: req.body.number }, { new: true })
+    .findByIdAndUpdate(req.params.id, { number: req.body.number }, { new: true, runValidators: true })
     .then(result => {
       if (!result) {
         res.status(404).send({ error: 'Person not found and therefore could not update'})
@@ -56,7 +56,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
       if (!result) {
         res.status(404).send({ error: 'Person not found and therefore could not delete' })
       } else {
-        res.status(204).send(result)
+        res.status(200).send(result)
       }
     })
     .catch(err => next(err))
