@@ -25,10 +25,23 @@ app.get('/api/persons', (req, res, next) => {
 
 app.get('/api/persons/:id', (req, res, next) => {
   Person
-    .findById({})
+    .findById(req.params.id)
     .then(result => {
       if (!result) {
         res.status(404).send({ error: 'Person not found'})
+      } else {
+        res.send(result)
+      }
+    })
+    .catch(err => next(err))
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  Person
+    .findByIdAndUpdate(req.params.id, { number: req.body.number }, { new: true })
+    .then(result => {
+      if (!result) {
+        res.status(404).send({ error: 'Person not found and therefore could not update'})
       } else {
         res.send(result)
       }
