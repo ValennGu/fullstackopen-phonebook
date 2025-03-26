@@ -100,12 +100,17 @@ const unkownEndpoint = (req, res) =>
   res.status(404).send({ error: 'Unkown endpoint' })
 
 const errorHandler = (error, req, res, next) => {
-  console.log('err: ', err)
-
-  res.status(400).send({
-    error: 'Bad request',
-    message: error.message
-  })
+  if (error.message === 'ValidationError') {
+    res.status(400).send({
+      error: 'Bad request',
+      message: error.message
+    })
+  } else {
+    res.status(500).send({
+      error: 'Internal server error',
+      message: error.message
+    })
+  }
 }
 
 app.use(unkownEndpoint)
