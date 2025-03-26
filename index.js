@@ -99,11 +99,14 @@ app.get('/info', (req, res) => {
 const unkownEndpoint = (req, res) =>
   res.status(404).send({ error: 'Unkown endpoint' })
 
-const errorHandler = (error, req, res, next) =>
+const errorHandler = (error, req, res, next) => {
+  console.log('err: ', err)
+
   res.status(400).send({
     error: 'Bad request',
     message: error.message
   })
+}
 
 app.use(unkownEndpoint)
 app.use(errorHandler)
