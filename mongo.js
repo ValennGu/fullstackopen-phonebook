@@ -9,7 +9,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Generate mongoose schema.
 const personSchema = new mongoose.Schema({
-  name: String, 
+  name: String,
   number: String
 })
 
@@ -50,9 +50,8 @@ if (process.argv.length === 2) {
   // Save content to MongoDB.
   person
     .save()
-    .then(result => {
+    .then(() => {
       log(`Added ${name} number ${number} to phonebook.`)
-      
       // Close the connection.
       mongoose.connection.close()
       log('Connection closed.')
